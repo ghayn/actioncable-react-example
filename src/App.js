@@ -1,26 +1,72 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ActionCableContextProvider, ActionCableContextConsumer } from './Context/ActionCableContext';
+import ChatPanel from './components/ChatList';
+import ServerMessages from './components/ServerMessages';
+import { StoreContextProvider, StoreContextConsumer } from './Context/StoreContext';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const TOKEN_KEY = "token";
+const token = localStorage.getItem(TOKEN_KEY);//"96d4eac5f39a90d1df02c4f9408ad835%7CtsLJ9F1NHG1muFntWsmP+UbvwMl3Mpd1Wtzm4zR3d7m/uNnn2OkYyn4FBX/uTJpgm7QsYcC793sBY47vVv40Gg=="
+
+const connectUri = `http://admin.meilala_mall.127-0-0-1.w.nip.ink/cable?http_authorization_token=${token}`
+
+function persistTokenToLocalStorage(token) {
+  localStorage.setItem(TOKEN_KEY, token);
+  window.location.reload();
+}
+
+function clearToken() {
+  localStorage.removeItem(TOKEN_KEY);
+  window.location.reload();
+}
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentToken: token || '',
+    };
+  }
+
+  render() {
+    const { currentToken } = this.state;
+
+    return (
+      <StoreContextProvider>
+        <ActionCableContextProvider url={connectUri}>
+          <div>
+            <fieldset>
+              <legend>Auth Token</legend>
+              <input
+                value={currentToken}
+                style={{ width: '100%' }}
+                onChange={({ target: { value } }) => { this.setState({ currentToken: value }) }}>
+              </input>
+              <br />
+              <button onClick={() => { persistTokenToLocalStorage(currentToken) }} style={{ fontSize: '14px', margin: 5 }}>Update</button>
+              <button onClick={() => { clearToken() }} style={{ fontSize: '14px', margin: 5 }}>Clear</button>
+            </fieldset>
+            <StoreContextConsumer>
+              {
+                ({ dispatch, Chat }) =>
+                  <ActionCableContextConsumer>
+                    {
+                      (actionCableContextProps) => <ChatPanel dispatch={dispatch} Chat={Chat} {...actionCableContextProps} />
+                    }
+                  </ActionCableContextConsumer>
+              }
+            </StoreContextConsumer>
+            <StoreContextConsumer>
+              {
+                ({ Server: { messages } }) => <ServerMessages messages={messages} />
+              }
+            </StoreContextConsumer>
+          </div>
+        </ActionCableContextProvider>
+      </StoreContextProvider>
+    );
+
+  }
 }
 
 export default App;

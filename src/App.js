@@ -1,8 +1,8 @@
 import React from 'react';
-import { ActionCableContextProvider, ActionCableContextConsumer } from './Context/ActionCableContext';
+import { ActionCableContextProvider, ActionCableContextConsumer } from './context/ActionCableContext';
 import ChatPanel from './components/ChatList';
 import ServerMessages from './components/ServerMessages';
-import { StoreContextProvider, StoreContextConsumer } from './Context/StoreContext';
+import { StoreContextProvider, StoreContextConsumer } from './context/StoreContext';
 
 const TOKEN_KEY = "token";
 const token = localStorage.getItem(TOKEN_KEY);//"96d4eac5f39a90d1df02c4f9408ad835%7CtsLJ9F1NHG1muFntWsmP+UbvwMl3Mpd1Wtzm4zR3d7m/uNnn2OkYyn4FBX/uTJpgm7QsYcC793sBY47vVv40Gg=="

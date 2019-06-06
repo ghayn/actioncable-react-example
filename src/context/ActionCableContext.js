@@ -1,13 +1,16 @@
 import React, { PureComponent } from 'react';
 import actioncable from 'actioncable';
 import objectOmitKeys from '../utils/omit';
+import { token, cableUrl } from "../config";
 
 const ActionCableContext = React.createContext();
 
 const ActionCableContextConsumer = ActionCableContext.Consumer;
 
+const connectUri = `${cableUrl}?http_authorization_token=${token}`
+
 const shelterFn = (fn, channel, args) => {
-  if (fn) fn(channel, { ...args });
+  if (fn) fn(channel, [...args]);
 }
 
 const createSubscription = (cable, { channel, onReceived, onInitialized, onConnected, onDisconnected, onRejected }) => {
@@ -24,12 +27,9 @@ const createSubscription = (cable, { channel, onReceived, onInitialized, onConne
 }
 
 class ActionCableContextProvider extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      cable: actioncable.createConsumer(props.url),
-      subscriptions: {},
-    }
+  state = {
+    cable: actioncable.createConsumer(connectUri),
+    subscriptions: {},
   }
 
   componentWillUnmount() {

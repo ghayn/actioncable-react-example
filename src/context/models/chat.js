@@ -2,7 +2,9 @@ export default {
   namespace: 'Chat',
   state: {
     messages: [],
-    summary: {},
+    summary: [],
+    chatList: [],
+    currentChat: null,
   },
   reducers: {
     updateMessages: (_, messages) => {
@@ -19,6 +21,8 @@ export default {
       };
     },
     updateSummary: (_, summary) => {
+      console.log(summary);
+
       return {
         summary,
       };

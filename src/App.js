@@ -3,6 +3,7 @@ import { ActionCableContextProvider, ActionCableContextConsumer } from './contex
 import ChatPanel from './components/ChatPanel';
 import ServerMessages from './components/ServerMessages';
 import { StoreContextConsumer } from './context/StoreContext';
+import global from "./global";
 import Setting from './components/Setting';
 
 class App extends React.Component {
@@ -12,7 +13,7 @@ class App extends React.Component {
   }
 
   initialize = ({ dispatch }) => {
-    window.app = { dispatch };
+    global.dispatch = dispatch;
   }
 
   render() {

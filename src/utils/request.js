@@ -85,27 +85,20 @@ export default function request(url, options = {}) {
       if (status === 401) {
         // @HACK
         /* eslint-disable no-underscore-dangle */
-        window.g_app._store.dispatch({
-          type: 'login/logout',
-        });
-        return {};
-      }
-
-      if (newOptions.method !== 'GET') {
-        return { error: { status, success: false, code: '40000', message: e.message } };
+        return { error: { status, success: false, code: '401', message: e.message } };
       }
 
       // environment should not be used
       if (status === 403) {
-        console.log(403);
+        return { error: { status, success: false, code: '403', message: e.message } };
       }
       if (status <= 504 && status >= 500) {
-        console.log(500);
+        return { error: { status, success: false, code: '500', message: e.message } };
       }
       if (status >= 404 && status < 422) {
-        console.log(404)
+        return { error: { status, success: false, code: '400', message: e.message } };
       }
 
-      return {};
+      return { error: { status, success: false, code: null, message: e.message } };
     });
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 const ServerMessages = ({ messages }) => {
   const [serverMessageVisible, setSeverMessageVisible] = useState(true);
+
   return (
     <fieldset>
       <legend>Server Messages</legend>

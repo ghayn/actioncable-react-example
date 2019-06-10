@@ -2,30 +2,59 @@ export default {
   namespace: 'Chat',
   state: {
     messages: [],
-    summary: [],
+    summary: {},
     chatList: [],
     currentChat: null,
   },
   reducers: {
-    updateMessages: (_, messages) => {
+    refreshMessages: (_, messages) => {
       return {
         messages: messages,
       }
     },
-    pushMessages: ({ messages: prevMessages }, message) => {
+    pullMessages: ({ messages: prevMessages}, messages) => {
+      return {
+        messages: prevMessages.concat(messages),
+      }
+    },
+    pushMessage: ({ messages: prevMessages }, message) => {
       return {
         messages: [
-          ...prevMessages,
           message,
+          ...prevMessages,
         ],
       };
     },
-    updateSummary: (_, summary) => {
-      console.log(summary);
+    updateChatList: ({ currentChat }, chatList) => {
+      return {
+        chatList: chatList.map(chat => {
+          if (currentChat && currentChat.id === chat.id) {
+            return {
+              ...chat,
+              unread_count: 0,
+            }
+          }
 
+          return chat;
+        }),
+      };
+    },
+    updateSummary: (_, summary) => {
       return {
         summary,
       };
-    }
+    },
+    updateCurrentChat: (_, chat) => {
+      return {
+        currentChat: chat,
+        messages: [],
+      }
+    },
+    leaveChat: () => {
+      return {
+        messages: [],
+        currentChat: null,
+      }
+    },
   }
 };

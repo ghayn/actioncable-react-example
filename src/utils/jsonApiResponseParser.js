@@ -1,4 +1,4 @@
-const JsonApiResponseParser = ({ data, included }) => {
+const JsonApiResponseParser = ({ data, included = [] }) => {
   let deepRelationshipParser;
 
   const relationshipsReducer = relationships => {

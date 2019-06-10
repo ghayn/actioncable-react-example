@@ -44,17 +44,22 @@ class StoreContextProvider extends PureComponent {
     }));
   }
 
-  dispatch = (reducer, payload) => {
-    const [namespace] = splitNamespaceAndReducer(reducer);
+  dispatch = (type, payload) => {
+    const [namespace] = splitNamespaceAndReducer(type);
+    const reducer = this.reducers[type];
+    if (reducer === undefined || reducer === null) throw new Error(`Cant find reducer ${type}`);
 
     this.setState((prevState) => {
       const prevNamespaceStates = prevState[namespace];
-      const fn = (payload) => this.reducers[reducer](prevNamespaceStates, payload);
+      const fn = (payload) => reducer(prevNamespaceStates, payload);
+      const newStates = fn(payload);
+
+      if (newStates === undefined || newStates === null || Object.keys(newStates).length === 0) return null;
 
       return {
         [namespace]: {
           ...prevNamespaceStates,
-          ...fn(payload),
+          ...newStates,
         },
       };
     });

@@ -7,7 +7,7 @@ const ActionCableContext = React.createContext();
 
 const ActionCableContextConsumer = ActionCableContext.Consumer;
 
-const connectUri = `${cableUrl}?http_authorization_token=${token}`
+const connectUri = `${cableUrl}?http_authorization=${token}`
 
 const shelterFn = (fn, channel, args) => {
   if (fn) fn(channel, [...args]);

@@ -33,8 +33,8 @@ class ChatPanel extends React.PureComponent {
       onRejected: (...args) => this.handleLogServerMessages('onRejected', args),
     }, {
       channel: 'ChatListChannel',
-      onInitialized: (...args) => this.handleChatListConnected('onInitialized', args),
-      onConnected: (...args) => this.handleLogServerMessages('onConnected', args),
+      onInitialized: (...args) => this.handleLogServerMessages('onInitialized', args),
+      onConnected: (...args) => this.handleChatListConnected('onConnected', args),
       onReceived: (...args) => this.handleChatListReceived('onReceived', args),
       onDisconnected: (...args) => this.handleLogServerMessages('onDisconnected', args),
       onRejected: (...args) => this.handleLogServerMessages('onRejected', args),
